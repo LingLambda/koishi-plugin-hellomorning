@@ -1,0 +1,24 @@
+{
+  "name": "koishi-plugin-hellomorning",
+  "description": "让你的bot每天定时打招呼/暖心话/新闻",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "dist"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "chatbot",
+    "koishi",
+    "plugin"
+  ],
+  "devDependencies": {
+    "@koishijs/client": "^5.29.3"
+  },
+  "peerDependencies": {
+    "@koishijs/plugin-console": "^5.29.3",
+    "koishi": "^4.17.11"
+  }
+}

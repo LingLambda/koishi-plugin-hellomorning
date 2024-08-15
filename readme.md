@@ -14,8 +14,8 @@
 更多功能  
 分群配置 
 ## 感谢
-[60s API]("https://github.com/vikiboss/60s")  
-[一言]("https://hitokoto.cn")
+[60s API](https://github.com/vikiboss/60s)  
+[一言](https://hitokoto.cn)
 ## 其他
 这是我第一次写ts项目,第一次使用git,第一次发布koishi插件,如果发现巨大量低级错误还请谅解  
 如果有问题欢迎提出issue  

@@ -1,13 +1,20 @@
 {
   "name": "koishi-plugin-hellomorning",
   "description": "让你的bot每天定时打招呼/暖心话/新闻",
-  "version": "1.0.0-alpha",
+  "version": "1.0.0",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
+  "contributors": [
+    "ling <abc1514671906@163.com>"
+  ],
   "files": [
     "lib",
     "dist"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/intling-luo/koishi-plugin-hellomorning.git"
+  },
   "license": "MIT",
   "keywords": [
     "chatbot",
@@ -22,6 +29,16 @@
   },
   "peerDependencies": {
     "@koishijs/plugin-console": "^5.29.3",
-    "koishi": "^4.17.11"
+    "koishi": "^4.17.12"
+  },
+  "service": {
+    "required": [
+      "database",
+      "cron"
+    ]
+  },
+  "dependencies": {
+    "cron": "^3.1.7",
+    "database": "^0.0.2"
   }
 }

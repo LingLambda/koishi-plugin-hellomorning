@@ -5,3 +5,5 @@ dist/index.js
 dist/style.css
 lib/index.d.ts
 lib/index.js
+tsconfig.tsbuildinfo
+.npmignore

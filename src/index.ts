@@ -20,10 +20,34 @@ const hitokotoTypeDict: Record<string, string> = {
   '抖机灵': 'l'
 };
 
-
-const hitokotoUrl="https://v1.hitokoto.cn/"
+let hitokotoUrl=""
+const hitokotoUrl1="https://v1.hitokoto.cn/"
 const hitokotoUrl2="https://international.v1.hitokoto.cn/"//海外地址
 const newsUrl="https://60s.viki.moe/?v2=1"
+
+export const usage = `<h2>只是一个定时打招呼插件!</h2>  
+例:  
+每隔一分钟都发送一次:  
+  
+      分 时 日 周  
+  
+      -1,-1,-1,-1  
+每天早晨7点30分发送一次:  
+  
+      分 时 日 周  
+  
+       30,7,-1,-1 
+每周六12点发送一次:  
+  
+      分 时 日 周  
+  
+       0,12,-1, 6  
+不要设置不存在的时间哦  
+
+<small>已经安装服务还提示未加载不用管,能跑就行(</small>
+`
+
+
 export interface Config {
   min?: number
   hour?: number
@@ -31,18 +55,20 @@ export interface Config {
   weekDay?: number
   message?: string
   hitokotoType? : string
+  hitokotOverseasUrl?:boolean
   addHitokoto?:boolean
   addNews?:boolean
 }
 
 export const Config: Schema<Config> = Schema.object({
-  min: Schema.number().default(0).max(59).min(-1).description('每小时的第几分钟(0-59)(设为-1表示每小时的每分钟都允许触发) '),
-  hour: Schema.number().default(7).max(23).min(-1).description('每天的第几小时(0-23)(设为-1表示每天的每个小时都允许触发)'),
-  dayOfMonth: Schema.number().default(-1).max(31).min(-1).description('每个月的第几天(0-31)(设为-1表示每月的每天都允许触发)'),
-  weekDay: Schema.number().default(-1).max(7).min(-1).description('周几(1-7)(设为-1表示每周的每天都允许触发)'),
+  min: Schema.number().default(0).max(59).min(-1).description('每小时的第几分钟(0-59)'),
+  hour: Schema.number().default(7).max(23).min(-1).description('每天的第几小时(0-23)'),
+  dayOfMonth: Schema.number().default(-1).max(31).min(-1).description('每个月的第几天(0-31)'),
+  weekDay: Schema.number().default(-1).max(7).min(-1).description('周几(1-7)'),
   message: Schema.string().default("早上好,祝你度过美好的一天!!＼(＾▽＾)／").description("配置定时发送的自定义消息"),
   hitokotoType: Schema.union(['动画', '漫画', '游戏', '文学','原创','来自网络','其他','影视','诗词','网易云','哲学','抖机灵']).default('原创').description('配置一言的类型'),
   addHitokoto: Schema.boolean().default(true).description('是否添加一言'),
+  hitokotOverseasUrl: Schema.boolean().default(false).description("启用一言海外API"),
   addNews: Schema.boolean().default(false).description('是否添加新闻'),
 })
 
@@ -86,6 +112,7 @@ interface NewsRet {
 }
 
 export function apply(ctx: Context, config: Config) {
+    hitokotoUrl = config.hitokotOverseasUrl?hitokotoUrl2:hitokotoUrl1
     //定时触发事件
     ctx.cron(`${formatValue(config.min)} ${formatValue(config.hour)} ${formatValue(config.dayOfMonth)} * ${formatValue(config.weekDay)}`, async () => {
       ctx.emit('hellomorning/moring-event' ,config.message)
@@ -115,7 +142,7 @@ try {
       }
     )
     console.log(`${results.uuid+" "+results.type+" "+results.from+" "+results.from_who}`)
-    return string+`\n\n    ${results.hitokoto}\n\t\t\t\t\t\t---${results.from}`
+    return string+`\n\n    ${results.hitokoto}\n                              ---${results.from}`
 } catch (error) {
   return string+`${error.getMessage().toString()}`
 }
@@ -123,9 +150,7 @@ try {
 //拼接新闻字符串
 async function massageAddNews(string: string, ctx: Context){
   try {
-    const results: NewsRet =await ctx.http.get<NewsRet>(
-      newsUrl
-    )
+    const results: NewsRet =await ctx.http.get<NewsRet>(newsUrl)
     console.log(`${results.data.url+" "+results.data.cover}`)
     return string+`\n${results.data.news.join("\n")}`
   }catch (error) {

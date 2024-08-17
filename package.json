@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-hellomorning",
   "description": "让你的bot每天定时打招呼/暖心话/新闻",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "contributors": [
@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "cron": "^3.1.7",
-    "database": "^0.0.2"
+    "database": "^0.0.2",
+    "koishi-plugin-cron": "^3.1.0"
   }
 }

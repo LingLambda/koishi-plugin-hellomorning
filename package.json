@@ -25,11 +25,11 @@
     "news"
   ],
   "devDependencies": {
-    "@koishijs/client": "^5.29.3"
+    "@koishijs/client": "^5.28.0"
   },
   "peerDependencies": {
-    "@koishijs/plugin-console": "^5.29.3",
-    "koishi": "^4.17.12"
+    "@koishijs/plugin-console": "^5.28.0",
+    "koishi": "^4.0.0"
   },
   "service": {
     "required": [
@@ -38,8 +38,8 @@
     ]
   },
   "dependencies": {
-    "cron": "^3.1.7",
+    "cron": "^3.0.0",
     "database": "^0.0.2",
-    "koishi-plugin-cron": "^3.1.0"
+    "koishi-plugin-cron": "^3.0.0"
   }
 }

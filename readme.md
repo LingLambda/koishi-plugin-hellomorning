@@ -2,8 +2,6 @@
 
 [![npm](https://img.shields.io/npm/v/koishi-plugin-hellomorning?style=flat-square)](https://www.npmjs.com/package/koishi-plugin-hellomorning)
 
-# Hello Morning
-
 ## 介绍  
 十分简单的一个插件,设置时间后,bot每次在指定时间会自动向代理的所有群聊发送问候语+今日新闻+随机一言  
 ## 配置

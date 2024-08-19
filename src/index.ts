@@ -1,29 +1,11 @@
 import {Context, Schema } from 'koishi'
-import {} from '@koishijs/plugin-console'
 import {} from '@koishijs/plugin-http'
 import {} from 'koishi-plugin-cron'
 
 export const name = 'hellomorning'
-
-const hitokotoTypeDict: Record<string, string> = {
-  '动画': 'a',
-  '漫画': 'b',
-  '游戏': 'c',
-  '文学': 'd',
-  '原创': 'e',
-  '来自网络': 'f',
-  '其他': 'g',
-  '影视': 'h',
-  '诗词': 'i',
-  '网易云': 'j',
-  '哲学': 'k',
-  '抖机灵': 'l'
-};
-
-let hitokotoUrl=""
-const hitokotoUrl1="https://v1.hitokoto.cn/"
-const hitokotoUrl2="https://international.v1.hitokoto.cn/"//海外地址
-const newsUrl="https://60s.viki.moe/?v2=1"
+export const inject = {
+  required: ['cron']
+}
 
 export const usage = `<h2>只是一个定时打招呼插件!</h2>  
 例:  
@@ -46,6 +28,26 @@ export const usage = `<h2>只是一个定时打招呼插件!</h2>
 
 <small>已经安装服务还提示未加载不用管,能跑就行(</small>
 `
+
+const hitokotoTypeDict: Record<string, string> = {
+  '动画': 'a',
+  '漫画': 'b',
+  '游戏': 'c',
+  '文学': 'd',
+  '原创': 'e',
+  '来自网络': 'f',
+  '其他': 'g',
+  '影视': 'h',
+  '诗词': 'i',
+  '网易云': 'j',
+  '哲学': 'k',
+  '抖机灵': 'l'
+};
+
+let hitokotoUrl=""
+const hitokotoUrl1="https://v1.hitokoto.cn/"
+const hitokotoUrl2="https://international.v1.hitokoto.cn/"//海外地址
+const newsUrl="https://60s.viki.moe/?v2=1"
 
 
 export interface Config {
@@ -72,9 +74,6 @@ export const Config: Schema<Config> = Schema.object({
   addNews: Schema.boolean().default(false).description('是否添加新闻'),
 })
 
-export const inject = {
-  required: ['cron','database'],
-}
 
 declare module 'koishi' {
 interface Events {

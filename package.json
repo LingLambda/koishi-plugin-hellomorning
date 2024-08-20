@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-hellomorning",
   "description": "让你的bot每天定时打招呼/暖心话/新闻",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "contributors": [
@@ -22,7 +22,10 @@
     "plugin",
     "timer",
     "hitokoto",
-    "news"
+    "news",
+    "定时",
+    "一言",
+    "新闻"
   ],
   "devDependencies": {
     "@koishijs/client": "^5.28.0"

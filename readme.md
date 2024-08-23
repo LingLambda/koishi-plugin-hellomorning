@@ -2,22 +2,50 @@
 
 [![npm](https://img.shields.io/npm/v/koishi-plugin-hellomorning?style=flat-square)](https://www.npmjs.com/package/koishi-plugin-hellomorning)
 
-## 介绍  
-十分简单的一个插件,设置时间后,bot每次在指定时间会自动向代理的所有群聊发送问候语+今日新闻+随机一言  
-## 配置
-可通过插件配置调整bot发送消息的时间,可以是设置为每分钟,每小时,每天,每星期,每个月发送一次.  
-可自定义问候语.  
-可开关是否发送新闻与一言.
-## TODO:
-更多功能  
-分群配置 
-## 感谢
-[60s API](https://github.com/vikiboss/60s)  
-[一言](https://hitokoto.cn)
-## 其他
-这是我第一次写ts项目,第一次使用git,第一次发布koishi插件,如果发现巨大量低级错误还请谅解  
-如果有问题欢迎提出issue  
-不管有没有问题都欢迎通过abc1514671906@163.com联系我
-## License
+## 介绍 🌅
 
-[MIT](LICENSE) License Copyright (c) 2024 ling
+你好! 早晨!  
+希望这个插件能带给大家美妙的每一天!
+
+设置时间后，Bot 每次在指定时间会自动向代理的所有群聊发送打招呼、暖心话、新闻，或更多内容！
+
+
+## 已支持功能 ✨
+
+通过插件配置调整 Bot 发送消息的时间，使用高级配置，自由度更高。  
+目前支持的功能包括：
+
+- **一言** ✍️
+- **60s 新闻(文本或图片)** 📰
+- **摸鱼日历** 📅
+- **每日微语** 💬
+
+## TODO 🛠️
+
+- 更多功能
+- 分群配置
+
+
+## 感谢 ❤️
+
+特别感谢以下服务的支持：
+
+- [一言](https://hitokoto.cn)
+- [韩小韩](https://api.vvhan.com)
+- [云综合](https://api.03c3.cn/)
+- [60s](https://github.com/vikiboss/60s)
+
+
+## 其他信息 📚
+
+这是我第一次写 TypeScript 项目，第一次使用 Git，第一次发布 Koishi 插件，如果发现巨大量低级错误还请谅解。
+
+如有问题，欢迎提出 [issue](https://github.com/ling/koishi-plugin-hellomorning/issues)。
+
+不管有没有问题都欢迎通过邮件联系我: [abc1514671906@163.com](mailto:abc1514671906@163.com)
+
+---
+
+## License 📜
+
+[MIT](LICENSE) License © 2024 ling

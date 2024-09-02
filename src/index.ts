@@ -67,6 +67,8 @@ export interface Config {
   cronTime?: string
   newsInterface?: string
   addWeiyu?: boolean
+  broad?: boolean
+  broadArray?: Array<{ adapter: string, botId: string, groupId: string }>
 }
 
 
@@ -109,7 +111,21 @@ export const Config: Schema<Config> = Schema.intersect([
   ]),
   Schema.object({
     addWeiyu: Schema.boolean().default(false).description('是否添加每日微语'),
-  }).description('微语设置')
+  }).description('微语设置'),
+  Schema.object({
+    broad: Schema.boolean().default(true).description('在所有群聊广播,关闭后可指定群配置'),
+  }).description('全局广播'),
+  Schema.union([
+    Schema.object({
+      broad: Schema.const(false).required(),
+      broadArray: Schema.array(Schema.object({
+        adapter: Schema.string().default("onebot").description("适配器名"),
+        botId: Schema.string().default("552487878").description("机器人账号"),
+        groupId: Schema.string().default("1145141919").description("群组号")
+      })).role('table')
+    }),
+    Schema.object({}),
+  ])
 ])
 
 
@@ -170,11 +186,18 @@ export function apply(ctx: Context, config: Config) {
       else if (config.newsInterface == "摸鱼日历(图片)")
         message = await massageAddMuoyuImg(message, ctx)
     }
-    if(config.addWeiyu)
+    if (config.addWeiyu)
       message = await massageAddWeiyu(message, ctx)
     if (config.addHitokoto)
       message = await massageAddHitokoto(message, ctx, config)
-    await ctx.broadcast(message)
+    //是否全局广播,否则循环选择的群
+    if (config.broad) await ctx.broadcast(message)
+    else {
+      for (const broad of config.broadArray) {
+        ctx.bots[`${broad.adapter}:${broad.botId}`].sendMessage(`${broad.groupId}`, message);
+        ctx.sleep(2000);
+      }
+    }
   })
 }
 //检查配置的时间中是否有空或-1,这个if没什么用但是为了防止我自己铸币导致传入空导致bug还是加了

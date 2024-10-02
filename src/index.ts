@@ -1,4 +1,5 @@
 import { Context, h, Schema } from 'koishi'
+import { transform } from 'koishi-plugin-markdown'
 import { } from '@koishijs/plugin-http'
 import { } from 'koishi-plugin-cron'
 export const name = 'hellomorning'
@@ -74,7 +75,7 @@ export interface Config {
 
 export const Config: Schema<Config> = Schema.intersect([
   Schema.object({
-    message: Schema.string().default("早上好,祝你度过美好的一天!!＼(＾▽＾)／").description("配置定时发送的自定义消息"),
+    message: Schema.string().role('textarea', { rows: [2, 4] }).default("早上好,祝你度过美好的一天!!＼(＾▽＾)／").description("配置定时发送的自定义消息(支持markdown)"),
     min: Schema.number().default(50).max(59).min(-1).description('每小时的第几分钟(0-59)'),
     hour: Schema.number().default(7).max(23).min(-1).description('每天的第几小时(0-23)'),
     dayOfMonth: Schema.number().default(-1).max(31).min(-1).description('每个月的第几天(0-31)'),
@@ -167,17 +168,37 @@ interface NewsRet {
 export function apply(ctx: Context, config: Config) {
   hitokotoUrl = config.hitokotOverseasUrl ? hitokotoUrl2 : hitokotoUrl1
   const morntime = config.advancedTimer ? config.cronTime : `${formatValue(config.min)} ${formatValue(config.hour)} ${formatValue(config.dayOfMonth)} * ${formatValue(config.weekDay)}`
+
+  ctx.command('hellomorning', '手动触发hellomorning发送到当前会话')
+    .action((_) => getMorningMsg(config.message))
+
   try {
     //定时触发事件
     ctx.cron(morntime, async () => {
-      ctx.emit('hellomorning/moring-event', config.message)
+      ctx.emit('hellomorning/moring-event', null)
     })
   } catch (error) {
     //捕获配置错误
     ctx.logger("hellomorningTimeConfig").warn(error)
   }
   //响应事件
-  ctx.on('hellomorning/moring-event', async (message: string) => {
+  ctx.on('hellomorning/moring-event', async () => await sendMorningMsg(config.message))
+
+
+  async function sendMorningMsg(inputMsg: string) {
+    const outMsg = await getMorningMsg(inputMsg);
+    //是否全局广播,否则循环选择的群
+    if (config.broad) await ctx.broadcast(outMsg);
+    else {
+      for (const broad of config.broadArray) {
+        ctx.bots[`${broad.adapter}:${broad.botId}`].sendMessage(`${broad.groupId}`, outMsg);
+        ctx.sleep(2000);
+      }
+    }
+  }
+
+  async function getMorningMsg(inputMsg: string) {
+    let message = '';
     if (config.addNews) {
       if (config.newsInterface == "60s(文本)")
         message = await massageAddNews(message, ctx)
@@ -190,15 +211,10 @@ export function apply(ctx: Context, config: Config) {
       message = await massageAddWeiyu(message, ctx)
     if (config.addHitokoto)
       message = await massageAddHitokoto(message, ctx, config)
-    //是否全局广播,否则循环选择的群
-    if (config.broad) await ctx.broadcast(message)
-    else {
-      for (const broad of config.broadArray) {
-        ctx.bots[`${broad.adapter}:${broad.botId}`].sendMessage(`${broad.groupId}`, message);
-        ctx.sleep(2000);
-      }
-    }
-  })
+    const outMsg = transform(inputMsg) + message;
+    //ctx.logger("hellomorningMd").info(outMsg);
+    return outMsg;
+  }
 }
 //检查配置的时间中是否有空或-1,这个if没什么用但是为了防止我自己铸币导致传入空导致bug还是加了
 function formatValue(value: number): string {

@@ -28,7 +28,9 @@ export const usage = `<h1>不只是一个定时打招呼插件!</h1>
 高级定时功能可参考<a href="http://crontab.org/">cron</a>  
 不要设置不存在的时间哦  
 
-<small>已经安装服务还提示未加载不用管,能跑就行(</small>
+---
+<small>已经安装服务还提示未加载不用管,能跑就行  
+建议将全局设置的delay.broadcast设置为2000以上</small>
 `
 
 const hitokotoTypeDict: Record<string, string> = {
@@ -173,6 +175,8 @@ export function apply(ctx: Context, config: Config) {
     .action((_) => getMorningMsg(config.message))
 
   try {
+    console.log(morntime);
+    
     //定时触发事件
     ctx.cron(morntime, async () => {
       ctx.emit('hellomorning/moring-event', null)
@@ -218,7 +222,7 @@ export function apply(ctx: Context, config: Config) {
 }
 //检查配置的时间中是否有空或-1,这个if没什么用但是为了防止我自己铸币导致传入空导致bug还是加了
 function formatValue(value: number): string {
-  if (!value)
+  if (value && value === -1)
     return '*'
   return value === -1 ? '*' : value.toString()
 }

@@ -175,8 +175,6 @@ export function apply(ctx: Context, config: Config) {
     .action((_) => getMorningMsg(config.message))
 
   try {
-    console.log(morntime);
-    
     //定时触发事件
     ctx.cron(morntime, async () => {
       ctx.emit('hellomorning/moring-event', null)

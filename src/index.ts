@@ -62,7 +62,7 @@ export interface Config {
   dayOfMonth?: number
   weekDay?: number
   message?: string
-  hitokotoType?: string
+  hitokotoTypeArray?: Array<string>
   hitokotOverseasUrl?: boolean
   addHitokoto?: boolean
   addNews?: boolean
@@ -98,7 +98,11 @@ export const Config: Schema<Config> = Schema.intersect([
     Schema.object({
       addHitokoto: Schema.const(true),
       hitokotOverseasUrl: Schema.boolean().default(false).description("启用一言海外API"),
-      hitokotoType: Schema.union(['动画', '漫画', '游戏', '文学', '原创', '来自网络', '其他', '影视', '诗词', '网易云', '哲学', '抖机灵']).default('原创').description('配置一言的类型'),
+      hitokotoTypeArray: Schema.array(
+        Schema.union(['动画', '漫画', '游戏', '文学', '原创', '来自网络', '其他', '影视', '诗词', '网易云', '哲学', '抖机灵']))
+        .default(['原创'])
+        .description('配置一言的类型')
+        .role('select'),
     }),
     Schema.object({}),
   ]),
@@ -230,7 +234,7 @@ async function massageAddHitokoto(string: string, ctx: Context, config: Config) 
     const result: HitokotoRet = await ctx.http.get<HitokotoRet>(
       hitokotoUrl,
       {
-        params: { c: `${hitokotoTypeDict[config.hitokotoType]}` }
+        params: { c: `${hitokotoTypeDict[config.hitokotoTypeArray[Math.floor(Math.random() * config.hitokotoTypeArray.length)]]}` }
       }
     )
     ctx.logger("hitokoto").info(result);

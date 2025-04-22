@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-hellomorning",
   "description": "让你的bot每天定时打招呼/暖心话/新闻,或者更多!",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "contributors": [

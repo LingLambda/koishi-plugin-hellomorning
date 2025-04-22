@@ -2,6 +2,7 @@ import { Context } from "koishi";
 import { Config } from "./config";
 import { transform } from "koishi-plugin-markdown";
 import {} from "@koishijs/plugin-http";
+import {} from "koishi-plugin-hello-rainbow";
 import {} from "koishi-plugin-cron";
 import {
   assetsInit,
@@ -71,7 +72,7 @@ export function apply(ctx: Context, config: Config) {
       if (addNews) {
         outMsg += await getNewsImg();
       }
-      return outMsg;
+      return await pushRainbowInfo(ctx, config, outMsg);
     }
     const regexList = [
       /\{hello\}/gi,
@@ -120,10 +121,20 @@ export function apply(ctx: Context, config: Config) {
       }
     }
     outMsg += formatText.slice(sliptIndex);
-
-    return outMsg;
+    return await pushRainbowInfo(ctx, config, outMsg);
   }
 }
+
+async function pushRainbowInfo(ctx, config, outMsg) {
+  let outElement = outMsg;
+  if (config.enableRainbow && ctx.rainbow) {
+    const rainbowInfo = await ctx.rainbow.getWeather(config.city, 3);
+    // ctx.logger.info('enable',rainbowInfo)
+    outElement += rainbowInfo;
+  }
+  return outElement;
+}
+
 //检查配置的时间中是否有空或-1
 function formatValue(value: number): string {
   if (value && value === -1) return "*";

@@ -4,6 +4,7 @@ export const name = "hellomorning";
 //广播需要数据库依赖
 export const inject = {
   required: ["cron", "database"],
+  optional: ["rainbow"],
 };
 
 export const usage = `
@@ -78,6 +79,8 @@ export interface Config {
   broadArray?: Array<{ adapter: string; botId: string; groupId: string }>;
   isOutputFormat?: boolean;
   formatText?: string;
+  enableRainbow?: boolean;
+  city?: string;
   debugModel?: boolean;
 }
 
@@ -195,6 +198,18 @@ export const Config: Schema<Config> = Schema.intersect([
           groupId: Schema.string().default("1145141919").description("群组号"),
         })
       ).role("table"),
+    }),
+    Schema.object({}),
+  ]),
+  Schema.object({
+    enableRainbow: Schema.boolean()
+      .default(false)
+      .description("启用 hello-rainbow 服务"),
+  }).description("资讯设置"),
+  Schema.union([
+    Schema.object({
+      enableRainbow: Schema.const(true).required(),
+      city: Schema.string().default("北京").description("城市名"),
     }),
     Schema.object({}),
   ]),

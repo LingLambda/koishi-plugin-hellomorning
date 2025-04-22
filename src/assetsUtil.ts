@@ -59,10 +59,10 @@ export async function assetsInit(ctx: Context, config: Config) {
   http = ctx.http;
   log = ctx.logger("helloMorningUtil");
   hitokotoUrl = conf.hitokotOverseasUrl ? hitokotoUrl2 : hitokotoUrl1;
-  if(conf.debugModel){
-    log.level= Logger.DEBUG
-  }else{  
-    log.level= Logger.INFO
+  if (conf.debugModel) {
+    log.level = Logger.DEBUG;
+  } else {
+    log.level = Logger.INFO;
   }
 }
 
@@ -77,14 +77,17 @@ export async function getHitokoto() {
         c: `${hitokotoTypeDict[typeName]}`,
       },
     });
-    log.debug('hitokoto:', JSON.stringify(response));
+    log.debug("hitokoto:", JSON.stringify(response));
     log.debug(response);
     return [response.hitokoto, response.from];
-  }catch (error) {  
-    if (error.name === 'ForbiddenError' || (error.response && error.response.status === 403)) {
-      log.error('hitokoto: 403 Forbidden');
+  } catch (error) {
+    if (
+      error.name === "ForbiddenError" ||
+      (error.response && error.response.status === 403)
+    ) {
+      log.error("hitokoto: 403 Forbidden");
       return "";
-  } 
+    }
     log.error(error);
     return "";
   }
@@ -101,8 +104,8 @@ export async function getWeiyu(): Promise<string> {
 
 export async function getNewsText(): Promise<string> {
   try {
-    const response:NewsRet =  await http.get(newsUrl);
-    log.debug('newsText:', response.data.news);
+    const response: NewsRet = await http.get(newsUrl);
+    log.debug("newsText:", response.data.news);
     return response.data.news.join("\n");
   } catch (error) {
     log.error(error);
@@ -110,10 +113,10 @@ export async function getNewsText(): Promise<string> {
   }
 }
 
-export async function getNewsImg(): Promise<h|string> {
+export async function getNewsImg(): Promise<h | string> {
   try {
     const response = await http.get(newsImgUrl);
-    log.debug('newsImg:', response);
+    log.debug("newsImg:", response);
     //h.image用来发二进制图片
     return h.image(response, "image/png");
   } catch (error) {
@@ -122,14 +125,13 @@ export async function getNewsImg(): Promise<h|string> {
   }
 }
 
-export async function getMuoyuImg(): Promise<h|string> {
+export async function getMuoyuImg(): Promise<h | string> {
   try {
     const response = await http.get(muoyuCalendarUrl);
-    log.debug('muoyuImg:', response);
+    log.debug("muoyuImg:", response);
     return h.image(response, "image/png");
   } catch (error) {
     log.error(error);
     return "";
   }
 }
-
